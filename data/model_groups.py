@@ -15,5 +15,8 @@ class Group(SqlAlchemyBase, SerializerMixin):
     id = sqlalchemy.Column(sqlalchemy.Integer,
                            primary_key=True,
                            autoincrement=True)
-    name = sqlalchemy.Column(sqlalchemy.String, null=False)
-    leader = sqlalchemy.Column(sqlalchemy.Integer)
+    name = sqlalchemy.Column(sqlalchemy.String)
+    teacher = sqlalchemy.Column(sqlalchemy.Integer)
+    tasks = sqlalchemy.orm.relation("Task",
+                                    secondary="groups_to_tasks",
+                                    backref="groups")

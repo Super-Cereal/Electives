@@ -1,40 +1,40 @@
 body {
-    font-family: "Verdana", sans-serif;
+    background-color: #eeeef1;
+    font-family: "Calibri", sans-serif;
+    font-size: 15px;
+    background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACMAAAAjCAMAAAApB0NrAAAABlBMVEX///+pqalTpKl9AAAAAnRSTlMAGovxNEIAAAAdSURBVDjLY2AAAUaG4UYxDDsfjfp91O+jfqfE7wCzpQCw/dq+qQAAAABJRU5ErkJggg==");
+}
+
+* {
     margin: 0;
     padding: 0;
 }
 
-a {
-    color: #000000;
-    text-decoration: none;
-}
-
-a:hover {
-    text-decoration: underline;
-}
-
 .page-header {
     background-color: #333;
-    height: 40px;
-    padding-top: 10px;
-    text-align: center;
 }
 
 .page-header a {
     color: #f2f4f6;
-    display: inline-block;
-    padding: 20px;
-}
-
-.page-header a:hover {
-    background-color: #444;
+    padding: 10px 20px;
     text-decoration: none;
 }
 
+.page-header a:hover {
+    background-color: #555;
+}
+
+.page-header h1 {
+    padding: 5px 0;
+    border-bottom: 2px solid #555;
+    color: #f2f4f6;
+    font-size: 28px;
+    text-align: center;
+}
+
 .page-main {
-    background-color: #eeeef1;
     color: #222222;
-    min-height: 595px;
+    min-height: 533px;
 }
 
 .page-footer{
@@ -53,7 +53,7 @@ a:hover {
     border-radius: 5px;
 }
 
-.alert-danger { background-color: rgba(85, 0, 0, 0.6); }
+.alert-danger { color: rgba(122, 0, 0, 0.8); }
 
 .flexbox { display: flex; }
 
@@ -70,18 +70,20 @@ a:hover {
     background-color: #f2f4f6;
 }
 
-.main_content {
-    padding: 10px;
-    background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACMAAAAjCAMAAAApB0NrAAAABlBMVEX///+pqalTpKl9AAAAAnRSTlMAGovxNEIAAAAdSURBVDjLY2AAAUaG4UYxDDsfjfp91O+jfqfE7wCzpQCw/dq+qQAAAABJRU5ErkJggg==");
+.form { 
+    background-color: rgba(235, 235, 235);
+    border: 2px solid rgba(63, 136, 143);
+    border-radius: 7px;
+    margin: 20px auto; 
+    table-layout: fixed; 
+    width: 500px;
 }
-
-.form { margin: auto; table-layout: fixed; width: 500px; }
 
 .form section { margin: 20px; }
 
-.form_field {
+.form-field {
     border-radius: 5px;
-    border: 1px solid rgb(189, 177, 177);
+    border: 1px solid rgba(63, 136, 143, 0.7);
     box-sizing: border-box;
     outline: none;
     padding: 10px;
@@ -89,10 +91,10 @@ a:hover {
 }
 
 .submit {
-    background: rgb(255, 100, 0);
-    border-color: rgb(200, 50, 0);
+    background-color: rgba(51, 109, 114, 0.9);
+    border-color: rgba(41, 87, 91, 0.9);
     border-radius: 10px;
-    color: whitesmoke;
+    color: rgb(250, 250, 250);
     cursor: pointer;
     margin-top: 15px;
     padding: 10px;
