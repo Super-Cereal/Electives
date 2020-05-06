@@ -3,7 +3,7 @@ from wtforms import StringField, IntegerField, SubmitField
 from wtforms.validators import DataRequired, NumberRange
 
 
-class FormEdit(FlaskForm):
+class FormEditUser(FlaskForm):
     name = StringField('Ваше имя :', validators=[DataRequired(message='Поле должно быть заполнено')])
     surname = StringField('Ваша фамилия :', validators=[DataRequired(message='Поле должно быть заполнено')])
     age = IntegerField('Ваш возраст :', validators=[DataRequired(message='Поле должно быть заполнено'),

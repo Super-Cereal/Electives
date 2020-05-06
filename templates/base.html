@@ -14,11 +14,20 @@
                 {% if current_user.is_authenticated %}
                     <a href="">Задания</a>
                 {% endif %}
-                <a href="">Группы</a>
+                <a href="/groups">Факультативы</a>
                 <a href="">Пользователи</a>
             </div>
             <div class="flexbox">
                 {% if current_user.is_authenticated %}
+                    {% if current_user.type == 0 %}
+                        <img src="../static/images/admin1.png" alt="" class="page-header-icon">
+                    {% elif current_user.type == 1 %}
+                        <img src="../static/images/moder1.png" alt="" class="page-header-icon">
+                    {% elif current_user.type == 2 %}
+                        <img src="../static/images/teacher3.png" alt="" class="page-header-icon">
+                    {% elif current_user.type == 3 %}
+                        <img src="../static/images/student1.png" alt="" class="page-header-icon">
+                    {% endif %}            
                     <a href="/logout">Личный кабинет</a>
                 {% else %}
                     <a href="/login">Войти</a>
@@ -27,8 +36,15 @@
             </div>
         </div>
     </header>
-    <main class="page-main">
-        {% block content %}{% endblock %}
+    <main class="{{ 'flexbox flex_r_nowr' if bool_userbox }}">
+        <div class="{{ 'main-content-userbox' if bool_userbox }}">
+            {% block content %}{% endblock %}
+        </div>
+        {% if bool_userbox %}
+        <div class='userbox flexbox flex_c_nowr'>
+            {% block userbox %}{% endblock %}
+        </div>
+        {% endif %}
     </main>
     <footer class="page-footer"></footer>
 </body>

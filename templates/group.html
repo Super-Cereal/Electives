@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="group-info">
+        <div class='flexbox flex_c_nowr'>
+            <div><img src="{{ group.image if group.image else '../static/images/none_image.png'}}" height="200px"><h2>{{ group.name }}</h2><h4>#id <span style='color: red'>{{ group.id }}</span></h4>
+                {% if group.info %}
+                    {% for line in group.info.split('\n') %}
+                        <p>{{ line }}</p> 
+                    {% endfor %}
+                {% else %}
+                    <p>Нет информации о факультативе</p>
+                {% endif %}
+            </div>
+            <div>
+                <h4>Участники: </h4>
+                {% for user in users %}
+                    <a href="/user/{{ user.id }}" class="link-user">{{ user.name }} {{ user.surname }}{{ ', ' if not loop.last }}</a>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% if current_user.is_authenticated %}
+{% block userbox %}
+    <h2>Инструменты</h2>
+    {% if (current_user.type == 2 and current_user.id == group.leader_id) or current_user.type <= 1 %}
+        <a href="/edit_group/{{ group.id }}" class='btn'>
+            <img src="/static/images/edit_icon1.png">Отредактировать факультатив</a>
+    {% endif %}
+    {% if current_user in users and current_user.id != group.leader_id %}
+        <a href="/leave_group/{{ group.id }}" class='btn red-btn'>Выйти из факультатива</a>
+    {% elif current_user.id == group.leader_id or current_user.type <= 1 %}
+        <a href="/del_group/{{ group.id }}" class='btn red-btn'>Удалить факультатив</a>
+    {% else %}
+        <a href="/join_group/{{ group.id }}" class='btn blue-btn'>Вступить в факультатив</a>
+    {% endif %}
+{% endblock %}
+{% endif %}

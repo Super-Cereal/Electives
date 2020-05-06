@@ -10,6 +10,49 @@ body {
     padding: 0;
 }
 
+main {
+    color: #222222;
+    min-height: 553px;
+}
+
+.main-content-userbox {
+    width: 86%;
+}
+
+a {
+    text-decoration: none;
+}
+
+.userbox {
+    background-color: rgb(230, 230, 230);
+    border-left: 1px solid lightslategrey;
+    padding: 0.5%;
+    width: 14%;
+}
+
+.userbox a img {
+    height: 12px;
+    margin-right: 3px;
+}
+
+.userbox h2 {
+    margin-bottom: 8px;
+}
+
+.userbox .btn {
+    margin-bottom: 8px;
+}
+
+.userbox input {
+    text-decoration: none;
+    border: none;
+    width: 100%;
+}
+
+.userbox input:focus {
+    outline: none;
+}
+
 .page-header {
     background-color: #333;
 }
@@ -32,9 +75,9 @@ body {
     text-align: center;
 }
 
-.page-main {
-    color: #222222;
-    min-height: 533px;
+.page-header-icon {
+    height: 36px;
+    margin-right: 5px;
 }
 
 .page-footer{
@@ -45,15 +88,42 @@ body {
     text-align: center;
 }
 
+.alert-danger { color: rgba(122, 0, 0, 1); }
+
 .btn {
     display: block;
-    background: lightgray;
+    background: #ccc;
     padding: 10px;
     color: #333;
     border-radius: 5px;
+    text-align: center;
 }
 
-.alert-danger { color: rgba(122, 0, 0, 0.8); }
+.red-btn {
+    background-color: rgba(135, 0, 0, 1);
+    color: white;
+}
+
+.blue-btn {
+    background-color: rgba(51, 109, 114, 1);
+    color: white;
+}
+
+.btn:hover {
+    background-color: #bbb;
+}
+
+.red-btn:hover {
+    background-color: rgba(100, 0, 0, 1);
+}
+
+.blue-btn:hover {
+    background-color: rgba(41, 87, 91, 1);
+}
+
+.link-user:hover {
+    text-decoration: underline;
+}
 
 .flexbox { display: flex; }
 
@@ -62,13 +132,6 @@ body {
 .flex_c_nowr { flex-flow: column nowrap; }
 
 .flex_jcspacebetween_aicenter { justify-content: space-between; align-items: flex-end; }
-
-.user_box { 
-    border: 1px solid lightgray; 
-    padding: 10px;
-    width: 12%;
-    background-color: #f2f4f6;
-}
 
 .form { 
     background-color: rgba(235, 235, 235);
@@ -101,7 +164,55 @@ body {
 }
 
 .average-table {
+    border-spacing: 0;
     margin: auto;
     table-layout: fixed;
     width: 90%;
+}
+
+.average-table a {
+    color: #55f;
+    text-decoration: underline solid #55f;
+}
+
+.average-table caption {
+    font-size: 25px;
+    padding: 15px 0px;
+}
+
+.average-table th {
+    color:rgba(235, 235, 235);
+    background-color: rgba(63, 136, 143, 1);
+    border-right: 2px solid rgba(41, 87, 91, 0.9);
+    padding: 5px 0px;
+    margin-bottom: 5px;
+}
+
+.average-table th:last-child {
+    border-right: none;
+}
+
+.average-table td {
+    background-color: rgba(235, 235, 235);
+    border-bottom: 2px solid rgba(63, 136, 143, 0.8);
+    border-right: 2px solid rgba(63, 136, 143, 0.8);
+    padding: 5px 5px;
+}
+
+.average-table td:last-child {
+    border-right: none;
+}
+
+.group-info {
+    display: block;
+    width: 80%;
+    margin: auto;
+    margin-top: 40px;
+    background-color: rgb(230, 230, 230);
+    padding: 30px;
+}
+
+.group-info img {
+    float: left;
+    margin: 0px 10px 7px 0px
 }

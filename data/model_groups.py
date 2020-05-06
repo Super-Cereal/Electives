@@ -1,7 +1,10 @@
 import sqlalchemy
 from sqlalchemy_serializer import SerializerMixin
+from sqlalchemy.ext.hybrid import hybrid_property
 
 from .db_session import SqlAlchemyBase
+from .db_session import create_session
+from data.model_users import User
 
 
 users_to_groups_association_table = sqlalchemy.Table('users_to_groups', SqlAlchemyBase.metadata,
@@ -16,7 +19,16 @@ class Group(SqlAlchemyBase, SerializerMixin):
                            primary_key=True,
                            autoincrement=True)
     name = sqlalchemy.Column(sqlalchemy.String)
-    teacher = sqlalchemy.Column(sqlalchemy.Integer)
+    leader_id = sqlalchemy.Column(sqlalchemy.Integer,
+                                  sqlalchemy.ForeignKey('users.id'))
+    info = sqlalchemy.Column(sqlalchemy.String)
+    users_num = sqlalchemy.Column(sqlalchemy.Integer, default=0)
     tasks = sqlalchemy.orm.relation("Task",
                                     secondary="groups_to_tasks",
                                     backref="groups")
+
+    @hybrid_property
+    def leader(self):
+        session = create_session()
+        leader = session.query(User).get(self.leader_id)
+        return leader

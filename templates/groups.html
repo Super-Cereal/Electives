@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <table class="average-table">
+        <caption>Все факультативы</caption>
+        <thead>
+            <th>Название</th>
+            <th>Руководитель</th>
+            <th>Кол-во участников</th>
+        </thead>
+        <tbody>
+            {% for group in groups %}
+                <tr>
+                    <td><a href="/group/{{ group.id }}">{{ group.name }}</a></td>
+                    <td>{{ group.leader.name }} {{ group.leader.surname }} (<a href="/user/{{ group.leader_id }}">#{{ group.leader_id }}</a>)</td>
+                    <td>{{ group.users_num }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
+
+{% if current_user.is_authenticated %}
+{% block userbox %}
+    <h2>Инструменты</h2>
+    {% if current_user.type < 3 %}
+    <a href="/add_group" class='btn'>
+        <img src="/static/images/add_icon1.png" alt="">Создать новый факультатив</a>
+    {% endif %}
+    <form method="POST" novalidate>
+        <input type="submit" value="Показать мои группы" class="btn">
+    </form>
+{% endblock %}
+{% endif %}

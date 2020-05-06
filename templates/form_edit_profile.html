@@ -3,7 +3,7 @@
 {% block content %}
     {% from "macros/render_field.html" import render_field %}
     <form method="post" class="form" novalidate>
-        <h1 style="text-align: center;">Редактировать</h1>
+        <h1 style="text-align: center;">Редактировать профиль</h1>
         {{ form.hidden_tag() }}
         {{ form.csrf_token() }}
         {{ render_field(form.name, class="form-field")}}
