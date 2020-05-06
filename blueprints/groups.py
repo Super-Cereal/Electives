@@ -1,4 +1,4 @@
-from flask import Blueprint, redirect, abort, render_template, request
+from flask import Blueprint, redirect, abort, render_template
 from flask_login import login_required, current_user
 
 from data import db_session
@@ -7,6 +7,7 @@ from data.model_groups import Group
 
 from forms.form_add_group import FormAddGroup
 from forms.form_edit_group import FormEditGroup
+from forms.form_filter_groups import FormFilterGroups
 
 
 blueprint = Blueprint('groups', __name__,
@@ -17,11 +18,20 @@ blueprint = Blueprint('groups', __name__,
 @blueprint.route('/groups', methods=["GET", "POST"])
 def groups():
     session = db_session.create_session()
-    if request.method == 'POST' and current_user.is_authenticated:
-        groups = current_user.groups
+    form = FormFilterGroups()
+    if form.validate_on_submit():
+        if form.filter_by.data == 2:
+            groups = session.query(Group).all()
+        else:
+            groups = current_user.groups
+        if form.sort_by.data == 2:
+            groups.sort(key=lambda x: x.name)
+        elif form.sort_by.data == 1:
+            groups.sort(key=lambda x: -x.users_num)
+        return render_template('groups.html', groups=groups, bool_userbox=True, form=form)
     else:
         groups = session.query(Group).all()
-    return render_template('groups.html', groups=groups, bool_userbox=current_user.is_authenticated)
+        return render_template('groups.html', groups=groups, bool_userbox=True, form=form)
 
 
 # работает
@@ -107,3 +117,33 @@ def del_group(group_id):
     session.delete(group)
     session.commit()
     return redirect('/groups')
+
+
+@blueprint.route('/join_group/<int:group_id>')
+@login_required
+def join_group(group_id):
+    session = db_session.create_session()
+    group = session.query(Group).get(group_id)
+    if not group:
+        abort(404)
+    if current_user not in group.users:
+        group.users.append(session.query(User).get(current_user.id))
+        group.users_num += 1
+    session.commit()
+    return redirect('/group/' + str(group_id))
+
+
+@blueprint.route('/leave_group/<int:group_id>')
+@login_required
+def leave_group(group_id):
+    session = db_session.create_session()
+    group = session.query(Group).get(group_id)
+    if not group:
+        abort(404)
+    if current_user.id == group.leader_id:
+        abort(403)
+    if current_user in group.users:
+        group.users.remove(session.query(User).get(current_user.id))
+        group.users_num -= 1
+    session.commit()
+    return redirect('/group/' + str(group_id))

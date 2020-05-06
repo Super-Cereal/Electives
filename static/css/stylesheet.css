@@ -121,8 +121,12 @@ a {
     background-color: rgba(41, 87, 91, 1);
 }
 
-.link-user:hover {
-    text-decoration: underline;
+.link {
+    color: #44f;
+}
+
+.link:hover {
+    text-decoration: underline solid #44f;;
 }
 
 .flexbox { display: flex; }
@@ -163,6 +167,22 @@ a {
     padding: 10px;
 }
 
+.mini-form {
+    background-color: rgba(215, 215, 215);
+    border: 1px dashed rgba(63, 136, 143);
+    border-radius: 4px;
+    padding: 2px;
+}
+
+.mini-form .form-field {
+    padding: 5px;
+    margin-bottom: 10px;
+}
+
+.mini-form .submit {
+    padding: 5px;
+}
+
 .average-table {
     border-spacing: 0;
     margin: auto;
@@ -171,8 +191,11 @@ a {
 }
 
 .average-table a {
-    color: #55f;
-    text-decoration: underline solid #55f;
+    color: #44f;
+}
+
+.average-table a:hover {
+    text-decoration: underline solid #44f;
 }
 
 .average-table caption {
@@ -203,7 +226,7 @@ a {
     border-right: none;
 }
 
-.group-info {
+.infolist {
     display: block;
     width: 80%;
     margin: auto;
@@ -212,7 +235,7 @@ a {
     padding: 30px;
 }
 
-.group-info img {
+.infolist img {
     float: left;
     margin: 0px 10px 7px 0px
 }

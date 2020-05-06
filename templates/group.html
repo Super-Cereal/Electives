@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <div class="group-info">
+    <div class="infolist">
         <div class='flexbox flex_c_nowr'>
             <div><img src="{{ group.image if group.image else '../static/images/none_image.png'}}" height="200px"><h2>{{ group.name }}</h2><h4>#id <span style='color: red'>{{ group.id }}</span></h4>
                 {% if group.info %}
@@ -15,14 +15,14 @@
             <div>
                 <h4>Участники: </h4>
                 {% for user in users %}
-                    <a href="/user/{{ user.id }}" class="link-user">{{ user.name }} {{ user.surname }}{{ ', ' if not loop.last }}</a>
+                    <a href="/user/{{ user.id }}" class="link">{{ user.name }} {{ user.surname }}{{ ', ' if not loop.last }}</a>
                 {% endfor %}
             </div>
         </div>
     </div>
 {% endblock %}
 
-{% if current_user.is_authenticated %}
+{% if bool_userbox %}
 {% block userbox %}
     <h2>Инструменты</h2>
     {% if (current_user.type == 2 and current_user.id == group.leader_id) or current_user.type <= 1 %}

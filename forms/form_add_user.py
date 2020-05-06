@@ -6,7 +6,7 @@ from data import db_session
 from data.model_users import User
 
 
-class FormRegistration(FlaskForm):
+class FormAddUser(FlaskForm):
     name = StringField('Ваше имя :', validators=[DataRequired(message='Поле должно быть заполнено')])
     surname = StringField('Ваша фамилия :', validators=[DataRequired(message='Поле должно быть заполнено')])
     age = IntegerField('Ваш возраст :', validators=[DataRequired(message='Поле должно быть заполнено'),

@@ -2,7 +2,7 @@
 
 {% block content %}
     <table class="average-table">
-        <caption>Все факультативы</caption>
+        <caption>Факультативы проекта</caption>
         <thead>
             <th>Название</th>
             <th>Руководитель</th>
@@ -20,15 +20,25 @@
     </table>
 {% endblock %}
 
-{% if current_user.is_authenticated %}
+{% if bool_userbox %}
 {% block userbox %}
     <h2>Инструменты</h2>
+    {% from 'macros/render_field.html' import render_field %}
     {% if current_user.type < 3 %}
     <a href="/add_group" class='btn'>
         <img src="/static/images/add_icon1.png" alt="">Создать новый факультатив</a>
     {% endif %}
-    <form method="POST" novalidate>
-        <input type="submit" value="Показать мои группы" class="btn">
+    <form method="POST" class="mini-form" novalidate>
+        {{ form.hidden_tag() }}
+        {{ form.csrf_token() }}
+        {% if current_user.is_authenticated %}
+        {{ render_field(form.filter_by, class="form-field") }}
+        {% endif %}
+        {{ render_field(form.sort_by, class="form-field") }}
+        <section>
+            <div class="alert-danger">{{ message }}</div>
+            {{ form.submit(class='blue-btn submit') }}
+        </section>
     </form>
 {% endblock %}
 {% endif %}

@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <table class="average-table">
+        <caption>Пользователи проекта</caption>
+        <thead>
+            <th>Имя</th>
+            <th>Тип</th>
+            <th>Возраст</th>
+            <th>Почта</th>
+        </thead>
+        <tbody>
+            {% for user in users %}
+                <tr>
+                    <td>{{ user.name }} {{ user.surname }} (<a href="/user/{{ user.id }}">#{{ user.id }}</a>)</td>
+                    <td>
+                        {{ 'Ученик ' if user.type == 3 }}
+                        {{ 'Учитель' if user.type == 2 }}
+                        {{ 'Администрация' if user.type == 1 }}
+                    </td>
+                    <td>{{ user.age }}</td>
+                    <td>{{ user.email }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
+
+{% if bool_userbox %}
+{% block userbox %}
+    <h2>Инструменты</h2>
+    {% from 'macros/render_field.html' import render_field %}
+    <form method='POST' class='mini-form' novalidate>
+        {{ form.hidden_tag() }}
+        {{ form.csrf_token() }}
+        {{ render_field(form.filter_by, class="form-field")}}
+        {{ render_field(form.sort_by, class="form-field")}}
+        <section>
+            <div class="alert-danger">{{ message }}</div>
+            {{ form.submit(class='blue-btn submit') }}
+        </section>
+    </form>
+{% endblock %}
+{% endif %}

@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="infolist">
+        <div class='flexbox flex_c_nowr'>
+            <div><img src="{{ user.image if user.image else '../static/images/none_image.png'}}" height="200px">
+                <h2>{{ user.name }} {{ user.surname }} - {{ 'Ученик ' if user.type == 3 }}
+                                                              {{ 'Учитель' if user.type == 2 }}
+                                                              {{ 'Администрация' if user.type == 1 }}</h2>
+                <h4>#id <span style='color: red'>{{ user.id }}</span></h4>
+                <h5>Последний раз заходил на сайт: <span style='color: red'>{{ user.last_time_in }}</span></h5>
+                <p>Возраст - {{ user.age }}</p>
+                <p>Почта - {{ user.email }}</p>
+            </div>
+            {% if user.type <= 2 %}
+            <div>
+                <h4>Руководитель следующих групп: </h4>
+                {% for group in groups %}
+                    {% if group.leader_id == user.id %}
+                        <a href="/group/{{ group.id }}" class="link">{{ group.name }}{{ ', ' if not loop.last }}</a>
+                    {% endif %}
+                {% endfor %}
+            </div>
+            {% endif %}
+            <div>
+                <h4>Участник следующих групп: </h4>
+                {% for group in groups %}
+                    <a href="/group/{{ group.id }}" class="link">{{ group.name }}{{ ', ' if not loop.last }}</a>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endblock %}
