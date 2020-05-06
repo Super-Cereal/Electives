@@ -3,7 +3,11 @@
 {% block content %}
     <div class="infolist">
         <div class='flexbox flex_c_nowr'>
-            <div><img src="{{ group.image if group.image else '../static/images/none_image.png'}}" height="200px"><h2>{{ group.name }}</h2><h4>#id <span style='color: red'>{{ group.id }}</span></h4>
+            <div><img src="{{ group.image if group.image else '../static/images/none_image.png'}}" height="200px">
+                <h2>{{ group.name }}</h2>
+                <h4>Руководитель - <a href="/user/{{ group.leader_id }}" class='link'>{{ group.leader.name }} {{ group.leader.surname }}</a></h4>
+                <h4>#id <span style='color: red'>{{ group.id }}</span></h4>
+
                 {% if group.info %}
                     {% for line in group.info.split('\n') %}
                         <p>{{ line }}</p> 
@@ -15,7 +19,7 @@
             <div>
                 <h4>Участники: </h4>
                 {% for user in users %}
-                    <a href="/user/{{ user.id }}" class="link">{{ user.name }} {{ user.surname }}{{ ', ' if not loop.last }}</a>
+                    <a href="/user/{{ user.id }}" class="link">{{ user.name }} {{ user.surname }}</a>{{ ', ' if not loop.last }}
                 {% endfor %}
             </div>
         </div>
@@ -31,10 +35,11 @@
     {% endif %}
     {% if current_user in users and current_user.id != group.leader_id %}
         <a href="/leave_group/{{ group.id }}" class='btn red-btn'>Выйти из факультатива</a>
-    {% elif current_user.id == group.leader_id or current_user.type <= 1 %}
-        <a href="/del_group/{{ group.id }}" class='btn red-btn'>Удалить факультатив</a>
-    {% else %}
+    {% elif current_user not in users %}
         <a href="/join_group/{{ group.id }}" class='btn blue-btn'>Вступить в факультатив</a>
+    {% endif %}
+    {% if current_user.id == group.leader_id or current_user.type <= 1 %}
+        <a href="/del_group/{{ group.id }}" class='btn red-btn'>Удалить факультатив</a>
     {% endif %}
 {% endblock %}
 {% endif %}

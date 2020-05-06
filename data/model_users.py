@@ -24,9 +24,6 @@ class User(SqlAlchemyBase, UserMixin, SerializerMixin):
     groups = sqlalchemy.orm.relation("Group",
                                      secondary="users_to_groups",
                                      backref="users")
-    tasks = sqlalchemy.orm.relation("Task",
-                                    secondary="users_to_tasks",
-                                    backref="addirional_users")
 
     def set_password(self, password):
         self.hashed_password = generate_password_hash(password)

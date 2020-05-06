@@ -5,9 +5,6 @@ from sqlalchemy_serializer import SerializerMixin
 from .db_session import SqlAlchemyBase
 
 
-users_to_tasks = sqlalchemy.Table('users_to_tasks', SqlAlchemyBase.metadata,
-                                  sqlalchemy.Column('users', sqlalchemy.Integer, sqlalchemy.ForeignKey('users.id')),
-                                  sqlalchemy.Column('tasks', sqlalchemy.Integer, sqlalchemy.ForeignKey('tasks.id')))
 groups_to_tasks = sqlalchemy.Table('groups_to_tasks', SqlAlchemyBase.metadata,
                                    sqlalchemy.Column('groups', sqlalchemy.Integer, sqlalchemy.ForeignKey('groups.id')),
                                    sqlalchemy.Column('tasks', sqlalchemy.Integer, sqlalchemy.ForeignKey('tasks.id')))

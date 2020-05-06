@@ -24,7 +24,7 @@
 {% block userbox %}
     <h2>Инструменты</h2>
     {% from 'macros/render_field.html' import render_field %}
-    {% if current_user.type < 3 %}
+    {% if current_user.is_authenticated and current_user.type < 3 %}
     <a href="/add_group" class='btn'>
         <img src="/static/images/add_icon1.png" alt="">Создать новый факультатив</a>
     {% endif %}

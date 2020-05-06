@@ -62,7 +62,7 @@ def add_group():
             info=form.info.data,
             users_num=1
         )
-        group.users.append(session.query(User).get(current_user.id))
+        group.users.append(session.query(User).get(form.leader_id.data))
         session.add(group)
         session.commit()
         return redirect('/groups')

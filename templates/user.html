@@ -17,7 +17,7 @@
                 <h4>Руководитель следующих групп: </h4>
                 {% for group in groups %}
                     {% if group.leader_id == user.id %}
-                        <a href="/group/{{ group.id }}" class="link">{{ group.name }}{{ ', ' if not loop.last }}</a>
+                        <a href="/group/{{ group.id }}" class="link">{{ group.name }}</a>{{ ', ' if not loop.last }}
                     {% endif %}
                 {% endfor %}
             </div>
@@ -25,7 +25,7 @@
             <div>
                 <h4>Участник следующих групп: </h4>
                 {% for group in groups %}
-                    <a href="/group/{{ group.id }}" class="link">{{ group.name }}{{ ', ' if not loop.last }}</a>
+                    <a href="/group/{{ group.id }}" class="link">{{ group.name }}</a>{{ ', ' if not loop.last }}
                 {% endfor %}
             </div>
         </div>
