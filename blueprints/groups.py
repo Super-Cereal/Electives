@@ -40,7 +40,8 @@ def group(group_id):
     session = db_session.create_session()
     group = session.query(Group).get(group_id)
     users = group.users
-    return render_template('group.html', group=group, users=users, bool_userbox=current_user.is_authenticated)
+    tasks = group.tasks
+    return render_template('group.html', group=group, users=users, tasks=tasks, bool_userbox=current_user.is_authenticated)
 
 
 # работает
@@ -88,8 +89,14 @@ def edit_group(group_id):
     if form.validate_on_submit():
         if current_user.type == 2 and form.leader_id.data != current_user.id:
             return render_template('form_add_group.html', form=form, message="Как учитель, вы можете создать факультатив только под своим руководством, ваш id - " + str(current_user.id))
-        if session.query(User).get(form.leader_id.data).type == 3:
+        leader = session.query(User).get(form.leader_id.data)
+        if not leader:
+            return render_template('form_add_group.html', form=form, message=f"Человека с id {form.leader_id.data} нет в системе")
+        if leader.type == 3:
             return render_template('form_add_group.html', form=form, message="Нельзя поставить в руководство ученика")
+        if leader not in group.users:
+            group.users.append(leader)
+            group.users_num += 1
         group.name = form.name.data
         group.leader_id = form.leader_id.data
         group.info = form.info.data

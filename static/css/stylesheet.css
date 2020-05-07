@@ -41,6 +41,7 @@ a {
 
 .userbox .btn {
     margin-bottom: 8px;
+    margin-top: 8px;
 }
 
 .userbox input {
@@ -229,9 +230,8 @@ a {
 .infolist {
     display: block;
     width: 80%;
-    margin: auto;
-    margin-top: 40px;
-    background-color: rgb(230, 230, 230);
+    margin: 40px auto;
+    background-color: rgb(230, 230, 240);
     padding: 30px;
 }
 

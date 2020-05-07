@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block content %}
+    {% for group, tasks in groups_n_tasks %}
+        <div class="infolist">
+            <h3>{{ group.name}}</h3>
+            <ul>
+                {% for task in group.tasks %}
+                <li><span style="color: rgba(0, 0, 0);">{{ task.name }}</span>
+                    <span style="color: rgba(120, 120, 120);">
+                    {% for line in task.content.split('\n') %}
+                        <p>{{ line }}</p> 
+                    {% endfor %}
+                    </span>
+                </li>
+                {% else %}
+                    <p><i>Пока заданий нет</i></p>
+                {% endfor %}
+            </ul>
+        </div>
+    {% else %}
+    {% endfor %}
+{% endblock %}

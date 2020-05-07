@@ -4,10 +4,15 @@
     <div class="infolist">
         <div class='flexbox flex_c_nowr'>
             <div><img src="{{ group.image if group.image else '../static/images/none_image.png'}}" height="200px">
-                <h2>{{ group.name }}</h2>
+                <div class="flexbox flex_jcspacebetween_aicenter">
+                    <h2>{{ group.name }}</h2>
+                    {% if current_user.id == group.leader_id %}
+                        <a href="/edit_group/{{ group.id }}" class='link'>
+                            <img src="/static/images/edit_icon1.png" height='18px'>Редактировать</a>
+                    {% endif %}
+                </div>
                 <h4>Руководитель - <a href="/user/{{ group.leader_id }}" class='link'>{{ group.leader.name }} {{ group.leader.surname }}</a></h4>
                 <h4>#id <span style='color: red'>{{ group.id }}</span></h4>
-
                 {% if group.info %}
                     {% for line in group.info.split('\n') %}
                         <p>{{ line }}</p> 
@@ -24,14 +29,31 @@
             </div>
         </div>
     </div>
+    {% if current_user in users %}
+    <div class="infolist">
+        <h3>Лист заданий</h3>
+        <ul>
+            {% for task in group.tasks %}
+            <li><span style="color: rgba(0, 0, 0);">{{ task.name }}</span>
+                <span style="color: rgba(120, 120, 120);">
+                {% for line in task.content.split('\n') %}
+                    <p>{{ line }}</p> 
+                {% endfor %}
+                </span>
+            </li>
+            {% else %}
+                <p><i>Пока заданий нет</i></p>
+            {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
 {% endblock %}
 
 {% if bool_userbox %}
 {% block userbox %}
     <h2>Инструменты</h2>
-    {% if (current_user.type == 2 and current_user.id == group.leader_id) or current_user.type <= 1 %}
-        <a href="/edit_group/{{ group.id }}" class='btn'>
-            <img src="/static/images/edit_icon1.png">Отредактировать факультатив</a>
+    {% if current_user.id == group.leader_id %}
+        <a href="/add_task/{{ group.id }}" class='btn'>Добавить задание для участников</a>
     {% endif %}
     {% if current_user in users and current_user.id != group.leader_id %}
         <a href="/leave_group/{{ group.id }}" class='btn red-btn'>Выйти из факультатива</a>

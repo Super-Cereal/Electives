@@ -12,11 +12,6 @@ blueprint = Blueprint('users', __name__,
                       template_folder='templates')
 
 
-# написать html
-@blueprint.route('/home/<int:user_id>')
-def home(user_id):
-    return render_template('base.html')
-
 # готова
 @blueprint.route('/users/', methods=['GET', 'POST'])
 def users():
@@ -42,14 +37,16 @@ def users():
 def user(user_id):
     session = db_session.create_session()
     user = session.query(User).get(user_id)
+    if not user:
+        abort(404)
     groups = user.groups
-    return render_template('user.html', user=user, groups=groups)
+    return render_template('user.html', user=user, groups=groups, bool_userbox=(current_user.id == user_id or current_user.type <= 1))
 
 
 # готова
-@blueprint.route('/edit_profile/<int:user_id>', methods=['GET', 'POST'])
+@blueprint.route('/edit_user/<int:user_id>', methods=['GET', 'POST'])
 @login_required
-def edit_profile(user_id):
+def edit_user(user_id):
     if user_id != current_user.id:
         abort(403)
     form = FormEditUser()
@@ -59,21 +56,31 @@ def edit_profile(user_id):
         user.name = form.name.data
         user.surname = form.surname.data
         user.age = form.age.data
+        user.email = form.email.data
         session.commit()
         return redirect('/')
     else:
         form.name.data = user.name
         form.surname.data = user.surname
         form.age.data = user.age
-        return render_template('form_edit.html', form=form)
+        form.email.data = user.email
+        return render_template('form_edit_user.html', form=form)
 
 
 # готова
-@blueprint.route('/del_profile<int:user_id>')
+@blueprint.route('/del_user/<int:user_id>')
 @login_required
-def del_profile(user_id):
+def del_user(user_id):
     session = db_session.create_session()
     user = session.query(User).get(user_id)
+    if not user:
+        abort(404)
+    if current_user.type >= 2 and current_user.id != user_id:
+        abort(403)
+    for group in user.groups:
+        group.users_num -= 1
+        if group.leader_id == user_id:
+            session.delete(group)
     session.delete(user)
-    session.comit()
+    session.commit()
     return redirect('/')

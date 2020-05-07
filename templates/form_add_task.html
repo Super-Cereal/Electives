@@ -3,12 +3,11 @@
 {% block content %}
     {% from "macros/render_field.html" import render_field %}
     <form method="post" class="form" novalidate>
-        <h1 style="text-align: center;">Редактировать профиль</h1>
+        <h1 style="text-align: center;">Добавить задание для "{{ group.name }}"</h1>
         {{ form.hidden_tag() }}
         {{ form.csrf_token() }}
         {{ render_field(form.name, class="form-field")}}
-        {{ render_field(form.surname, class="form-field")}}
-        {{ render_field(form.age, class="form-field")}}
+        {{ render_field(form.content, class="form-field")}}
         <section>
             <div class="alert-danger">{{ message }}</div>
             {{ form.submit(class='submit') }}

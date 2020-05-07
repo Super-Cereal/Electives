@@ -39,7 +39,7 @@ def registration():
         login_user(user)
         return redirect('/')
     else:
-        return render_template('form_registration.html', form=form)
+        return render_template('form_add_user.html', form=form)
 
 
 # готова
@@ -59,6 +59,7 @@ def login():
 
 
 # готова
+@blueprint.route('/logout/', methods=['GET', 'POST'])
 @blueprint.route('/logout', methods=['GET', 'POST'])
 @login_required
 def logout():

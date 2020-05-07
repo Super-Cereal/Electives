@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, IntegerField, SubmitField
-from wtforms.validators import DataRequired, NumberRange
+from wtforms.validators import DataRequired, NumberRange, Email
 
 
 class FormEditUser(FlaskForm):
@@ -8,4 +8,5 @@ class FormEditUser(FlaskForm):
     surname = StringField('Ваша фамилия :', validators=[DataRequired(message='Поле должно быть заполнено')])
     age = IntegerField('Ваш возраст :', validators=[DataRequired(message='Поле должно быть заполнено'),
                                                     NumberRange(min=6, max=115, message='Возраст должен быть в промежутке от 6 лет до 115')])
+    email = StringField('Ваша контактная почта :', validators=[DataRequired(message='Поле должно быть заполнено'), Email(message='Неккоректно задана почта')])
     submit = SubmitField('Отправить')

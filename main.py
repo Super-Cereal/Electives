@@ -16,6 +16,7 @@ app.register_blueprint(user_authenticate.blueprint)
 app.register_blueprint(groups.blueprint)
 app.register_blueprint(tasks.blueprint)
 app.register_blueprint(users.blueprint)
+app.register_blueprint(tasks.blueprint)
 
 
 # дописать html
