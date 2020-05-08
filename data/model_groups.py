@@ -7,9 +7,9 @@ from .db_session import create_session
 from data.model_users import User
 
 
-users_to_groups_association_table = sqlalchemy.Table('users_to_groups', SqlAlchemyBase.metadata,
-                                                     sqlalchemy.Column('users', sqlalchemy.Integer, sqlalchemy.ForeignKey('users.id')),
-                                                     sqlalchemy.Column('groups', sqlalchemy.Integer, sqlalchemy.ForeignKey('groups.id')))
+users_to_groups_table = sqlalchemy.Table('users_to_groups', SqlAlchemyBase.metadata,
+                                         sqlalchemy.Column('users', sqlalchemy.Integer, sqlalchemy.ForeignKey('users.id')),
+                                         sqlalchemy.Column('groups', sqlalchemy.Integer, sqlalchemy.ForeignKey('groups.id')))
 
 
 class Group(SqlAlchemyBase, SerializerMixin):
@@ -23,9 +23,8 @@ class Group(SqlAlchemyBase, SerializerMixin):
                                   sqlalchemy.ForeignKey('users.id'))
     info = sqlalchemy.Column(sqlalchemy.String)
     users_num = sqlalchemy.Column(sqlalchemy.Integer, default=0)
-    tasks = sqlalchemy.orm.relation("Task",
-                                    secondary="groups_to_tasks",
-                                    backref="groups")
+    photo = sqlalchemy.orm.relation("File", uselist=False)
+    tasks = sqlalchemy.orm.relation("Task", backref="group")
 
     @hybrid_property
     def leader(self):

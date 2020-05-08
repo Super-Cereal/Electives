@@ -21,6 +21,7 @@ class User(SqlAlchemyBase, UserMixin, SerializerMixin):
     last_time_in = sqlalchemy.Column(sqlalchemy.String,
                                      default=time.ctime)
     hashed_password = sqlalchemy.Column(sqlalchemy.String)
+    photo = sqlalchemy.orm.relation("File", uselist=False)
     groups = sqlalchemy.orm.relation("Group",
                                      secondary="users_to_groups",
                                      backref="users")

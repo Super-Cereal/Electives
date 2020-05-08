@@ -11,6 +11,9 @@
                     {% for line in task.content.split('\n') %}
                         <p>{{ line }}</p> 
                     {% endfor %}
+                    {% if task.file %}
+                        <p>Прикрепленный файл: <a href="/{{ task.file.path }}" class='link'>{{ task.file.path.rsplit('\\', 1)[-1] }}</a></p>
+                    {% endif %}
                     </span>
                 </li>
                 {% else %}

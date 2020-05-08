@@ -50,7 +50,7 @@ a {
     width: 100%;
 }
 
-.userbox input:focus {
+input:focus {
     outline: none;
 }
 
@@ -150,6 +150,7 @@ a {
 .form section { margin: 20px; }
 
 .form-field {
+    background-color: #fff;
     border-radius: 5px;
     border: 1px solid rgba(63, 136, 143, 0.7);
     box-sizing: border-box;

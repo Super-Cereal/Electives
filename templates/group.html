@@ -3,7 +3,8 @@
 {% block content %}
     <div class="infolist">
         <div class='flexbox flex_c_nowr'>
-            <div><img src="{{ group.image if group.image else '../static/images/none_image.png'}}" height="200px">
+            <div>
+                <img src="/{{ group.photo.path if group.photo else 'static/images/none_image.png'}}" height="200px">
                 <div class="flexbox flex_jcspacebetween_aicenter">
                     <h2>{{ group.name }}</h2>
                     {% if current_user.id == group.leader_id %}
@@ -21,6 +22,12 @@
                     <p>Нет информации о факультативе</p>
                 {% endif %}
             </div>
+            {% if current_user.is_authenticated and current_user.id == group.leader_id and group.photo %}
+            <div>
+                <a href="/del_group_photo/{{ group.id }}" class='link'><i>Удалить фотографию</i></a>
+            </div>
+            {% endif %}
+            <br>
             <div>
                 <h4>Участники: </h4>
                 {% for user in users %}
@@ -34,11 +41,17 @@
         <h3>Лист заданий</h3>
         <ul>
             {% for task in group.tasks %}
-            <li><span style="color: rgba(0, 0, 0);">{{ task.name }}</span>
+            <li><span style="color: rgba(0, 0, 0);">{{ task.name }} 
+                {% if group.leader_id == current_user.id %}
+                (<a href='/edit_task/{{ task.id }}' class='link'>ред.</a>; <a href='/del_task/{{ task.id }}' class="link">удал.</a>)</span>
+                {% endif %}
                 <span style="color: rgba(120, 120, 120);">
                 {% for line in task.content.split('\n') %}
                     <p>{{ line }}</p> 
                 {% endfor %}
+                {% if task.file %}
+                    <p>Прикрепленный файл: <a href="/{{ task.file.path }}" class='link'>{{ task.file.path.rsplit('\\', 1)[-1] }}</a></p>
+                {% endif %}
                 </span>
             </li>
             {% else %}

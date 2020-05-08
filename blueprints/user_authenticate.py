@@ -1,5 +1,6 @@
 from flask import Blueprint, redirect, render_template
 from flask_login import login_required, logout_user, login_user, LoginManager
+
 import time
 
 from data import db_session
@@ -37,7 +38,7 @@ def registration():
         session.add(user)
         session.commit()
         login_user(user)
-        return redirect('/')
+        return redirect(f'/user/{user.id}')
     else:
         return render_template('form_add_user.html', form=form)
 
@@ -54,7 +55,7 @@ def login():
         user.last_time_in = time.ctime()
         session.commit()
         login_user(user, remember=form.remember.data)
-        return redirect('/')
+        return redirect(f'/user/{user.id}')
     return render_template('form_login.html', form=form)
 
 

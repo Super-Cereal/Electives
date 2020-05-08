@@ -3,7 +3,8 @@
 {% block content %}
     <div class="infolist">
         <div class='flexbox flex_c_nowr'>
-            <div><img src="{{ user.image if user.image else '../static/images/none_image.png'}}" height="200px">
+            <div>
+                <img src="/{{ user.photo.path if user.photo else 'static/images/none_image.png' }}" height="200px">
                 <div class="flexbox flex_jcspacebetween_aicenter">
                     <h2>{{ user.name }} {{ user.surname }} - {{ 'Ученик ' if user.type == 3 }}
                         {{ 'Учитель' if user.type == 2 }}
@@ -18,6 +19,12 @@
                 <p>Возраст - {{ user.age }}</p>
                 <p>Почта - {{ user.email }}</p>
             </div>
+            {% if current_user.is_authenticated and current_user.id == user.id and user.photo %}
+            <div>
+                <a href="/del_user_photo/{{ user.id }}" class='link'><i>Удалить фотографию</i></a>
+            </div>
+            {% endif %}
+            <br>
             {% if user.type <= 2 %}
             <div>
                 <h4>Руководитель следующих факультативов: </h4>
