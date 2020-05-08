@@ -1,10 +1,10 @@
 from flask import Flask, render_template
 from blueprints import user_authenticate, tasks, groups, users
 
+from flask_restful import Api
+from api import resourses_users, resourses_groups
+
 from data import db_session
-# from data.model_groups import Group
-# from data.model_tasks import Task
-# from data.model_users import User
 
 
 app = Flask(__name__)
@@ -18,6 +18,11 @@ app.register_blueprint(tasks.blueprint)
 app.register_blueprint(users.blueprint)
 app.register_blueprint(tasks.blueprint)
 
+api = Api(app)
+api.add_resource(resourses_users.UserListResourse, '/api/users')
+api.add_resource(resourses_users.UserResourse, '/api/users/<int:user_id>')
+api.add_resource(resourses_groups.GroupListResourse, '/api/groups')
+api.add_resource(resourses_groups.GroupResourse, '/api/groups/<int:group_id>')
 
 # дописать html
 @app.route('/', methods=['GET'])
