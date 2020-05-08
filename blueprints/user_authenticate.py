@@ -14,14 +14,12 @@ blueprint = Blueprint('user_authenticate', __name__,
 login_manager = LoginManager()
 
 
-# готова
 @login_manager.user_loader
 def user_load(user_id):
     session = db_session.create_session()
     return session.query(User).get(user_id)
 
 
-# готова
 @blueprint.route('/registration', methods=['GET', 'POST'])
 def registration():
     form = FormAddUser()
@@ -43,7 +41,6 @@ def registration():
         return render_template('form_add_user.html', form=form)
 
 
-# готова
 @blueprint.route('/login', methods=['GET', 'POST'])
 def login():
     form = FormLogin()
@@ -59,7 +56,6 @@ def login():
     return render_template('form_login.html', form=form)
 
 
-# готова
 @blueprint.route('/logout/', methods=['GET', 'POST'])
 @blueprint.route('/logout', methods=['GET', 'POST'])
 @login_required

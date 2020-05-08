@@ -43,7 +43,7 @@ def add_task(group_id):
         group.tasks.append(task)
         if form.file.data:
             filename = secure_filename(form.file.data.filename)
-            path = f'static/downloads/group_{group.id}'
+            path = f'/home/SuperCereal/status-false/static/downloads/group_{group.id}'
             if not os.path.exists(path):
                 os.mkdir(path)
             if task.file and os.path.exists(task.file.path):
@@ -77,7 +77,7 @@ def edit_task(task_id):
 
         if form.file.data:
             filename = secure_filename(form.file.data.filename)
-            path = f'static/downloads/group_{task.group.leader_id}'
+            path = f'/home/SuperCereal/status-false/static/downloads/group_{task.group.leader_id}'
             if not os.path.exists(path):
                 os.mkdir(path)
             if task.file and os.path.exists(task.file.path):

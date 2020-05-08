@@ -108,7 +108,7 @@ def edit_group(group_id):
         group.info = form.info.data
         if form.photo.data:
             filename = secure_filename(form.photo.data.filename)
-            path = f'static/downloads/group_{group.id}'
+            path = f'/home/SuperCereal/status-false/static/downloads/group_{group.id}'
             if not os.path.exists(path):
                 os.mkdir(path)
             if group.photo and os.path.exists(group.photo.path):
@@ -138,8 +138,8 @@ def del_group_photo(group_id):
     elif current_user.id != group.leader_id:
         abort(403)
     if group.photo:
-        if os.path.exists(f'static/downloads/{group.id}'):
-            os.remove(f'static/downloads/{group.id}')
+        if os.path.exists(f'/home/SuperCereal/status-false/static/downloads/{group.id}'):
+            os.remove(f'/home/SuperCereal/status-false/static/downloads/{group.id}')
         session.delete(group.photo)
         session.commit()
     return redirect(f'/group/{group_id}')
@@ -156,8 +156,8 @@ def del_group(group_id):
         abort(404)
     elif current_user.type == 2 and not group.leader_id == current_user.id:
         abort(403)
-    if os.path.exists(f'static/downloads/group_{group.id}'):
-        for root, dirs, files in os.walk(f'static/downloads/group_{group.id}', topdown=False):
+    if os.path.exists(f'/home/SuperCereal/status-false/static/downloads/group_{group.id}'):
+        for root, dirs, files in os.walk(f'/home/SuperCereal/status-false/static/downloads/group_{group.id}', topdown=False):
             for name in files:
                 os.remove(os.path.join(root, name))
             for name in dirs:

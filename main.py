@@ -25,12 +25,13 @@ api.add_resource(resourses_users.UserResourse, '/api/users/<int:user_id>')
 api.add_resource(resourses_groups.GroupListResourse, '/api/groups')
 api.add_resource(resourses_groups.GroupResourse, '/api/groups/<int:group_id>')
 
-# дописать html
+
 @app.route('/', methods=['GET'])
 def index():
     return render_template('index.html')
 
 
 if __name__ == "__main__":
-    port = int(os.environ.get("PORT", 5000))
-    app.run(host='0.0.0.0', port=port)
+    if True:
+        port = int(os.environ.get("PORT", 5000))
+        app.run(host='0.0.0.0', port=port)
