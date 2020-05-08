@@ -3,6 +3,7 @@ from blueprints import user_authenticate, tasks, groups, users
 
 from flask_restful import Api
 from api import resourses_users, resourses_groups
+import os
 
 from data import db_session
 
@@ -31,7 +32,5 @@ def index():
 
 
 if __name__ == "__main__":
-    if True:
-        app.run()
-    if False:
-        session = db_session.create_session()
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host='0.0.0.0', port=port)
