@@ -1,5 +1,5 @@
 body {
-    background-color: #eeeef1;
+    background-color: #f6f6f6;
     font-family: "Calibri", sans-serif;
     font-size: 15px;
     background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACMAAAAjCAMAAAApB0NrAAAABlBMVEX///+pqalTpKl9AAAAAnRSTlMAGovxNEIAAAAdSURBVDjLY2AAAUaG4UYxDDsfjfp91O+jfqfE7wCzpQCw/dq+qQAAAABJRU5ErkJggg==");
@@ -55,7 +55,7 @@ input:focus {
 }
 
 .page-header {
-    background-color: #333;
+    background-color: #232323;
 }
 
 .page-header a {
@@ -82,7 +82,7 @@ input:focus {
 }
 
 .page-footer{
-    background-color: #333;
+    background-color: #232323;
     color: #f2f4f6;
     height: 40px;
     padding: 10px;

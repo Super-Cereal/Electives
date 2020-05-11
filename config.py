@@ -1,3 +1,3 @@
-DEBUG = False
+DEBUG = True
 SECRET_KEY = 'asatru_truth12G.'
 MAX_CONTENT_LENGTH = 16 * 1024 * 1024

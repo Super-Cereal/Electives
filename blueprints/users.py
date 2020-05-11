@@ -1,15 +1,15 @@
 from flask import Blueprint, redirect, abort, render_template
 from flask_login import login_required, current_user
 
-from werkzeug.utils import secure_filename
-import os
+from data import db_session
+from data.model_users import User
+
+from blueprints.macros.delete_downloads_structure import delete_downloads_structure
+from blueprints.macros.delete_file_if_exists import delete_file_if_exists
+from blueprints.macros.save_file import save_file
 
 from forms.form_edit_user import FormEditUser
 from forms.form_filter_users import FormFilterUsers
-
-from data import db_session
-from data.model_users import User
-from data.model_files import File
 
 
 blueprint = Blueprint('users', __name__,
@@ -59,19 +59,8 @@ def edit_user(user_id):
         user.age = form.age.data
         user.email = form.email.data
         if form.photo.data:
-            filename = secure_filename(form.photo.data.filename)
-            path = f'/home/SuperCereal/status-false/static/downloads/user_{user.id}'
-            if not os.path.exists(path):
-                os.mkdir(path)
-            if user.photo and os.path.exists(user.photo.path):
-                os.remove(user.photo.path)
-                session.delete(user.photo)
-            form.photo.data.save(os.path.join(path, filename))
-            photo = File(
-                user_id=user.id,
-                path=os.path.join(path, filename)
-            )
-            user.photo = photo
+            delete_file_if_exists(file=user.photo, session=session)
+            user.photo = save_file(data=form.photo.data, path=f'static/downloads/user_{user_id}')
         session.commit()
         return redirect(f'/user/{user_id}')
     else:
@@ -91,11 +80,7 @@ def del_user_photo(user_id):
         abort(404)
     elif current_user.id != user.id:
         abort(403)
-    if user.photo:
-        if os.path.exists(user.photo.path):
-            os.remove(user.photo.path)
-        session.delete(user.photo)
-        session.commit()
+    delete_file_if_exists(file=user.photo, session=session)
     return redirect(f'/user/{user_id}')
 
 
@@ -111,19 +96,9 @@ def del_user(user_id):
     for group in user.groups:
         group.users_num -= 1
         if group.leader_id == user_id:
-            if os.path.exists(f'/home/SuperCereal/status-false/static/downloads/group_{group.id}'):
-                for root, dirs, files in os.walk(f'/home/SuperCereal/status-false/static/downloads/group_{group.id}', topdown=False):
-                    for name in files:
-                        os.remove(os.path.join(root, name))
-                    for name in dirs:
-                        os.rmdir(os.path.join(root, name))
+            delete_downloads_structure(path=f'static/downloads/group_{ group.id }')
             session.delete(group)
-    if user.photo and os.path.exists(f'/home/SuperCereal/status-false/static/downloads/user_{user_id}'):
-        for root, dirs, files in os.walk(f'/home/SuperCereal/status-false/static/downloads/user_{user_id}', topdown=False):
-            for name in files:
-                os.remove(os.path.join(root, name))
-            for name in dirs:
-                os.rmdir(os.path.join(root, name))
+    delete_downloads_structure(path=f'static/downloads/user_{ user.id }')
     session.delete(user)
     session.commit()
     return redirect('/')

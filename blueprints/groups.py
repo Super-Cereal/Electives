@@ -1,14 +1,13 @@
 from flask import Blueprint, redirect, abort, render_template
 from flask_login import login_required, current_user
 
-from werkzeug.utils import secure_filename
-import os
-
 from data import db_session
 from data.model_users import User
 from data.model_groups import Group
-from data.model_files import File
 
+from blueprints.macros.delete_downloads_structure import delete_downloads_structure
+from blueprints.macros.delete_file_if_exists import delete_file_if_exists
+from blueprints.macros.save_file import save_file
 
 from forms.form_add_group import FormAddGroup
 from forms.form_edit_group import FormEditGroup
@@ -58,7 +57,7 @@ def add_group():
     form = FormAddGroup()
     if form.validate_on_submit():
         if current_user.type == 2 and form.leader_id.data != current_user.id:
-            return render_template('form_add_group.html', form=form, message="Как учитель, вы можете создать факультатив только под своим руководством, ваш id - " + str(current_user.id))
+            return render_template('form_add_group.html', form=form, message=f"Как учитель, вы можете создать факультатив только под своим руководством, ваш id - { current_user.id }")
         user = session.query(User).get(form.leader_id.data)
         if not user:
             return render_template('form_add_group.html', form=form, message=f"Человека с id { form.leader_id.data } нет в системе")
@@ -73,10 +72,14 @@ def add_group():
         group.users.append(session.query(User).get(form.leader_id.data))
         session.add(group)
         session.commit()
-        return redirect('/groups')
+        if form.photo.data:
+            delete_file_if_exists(file=group.photo, session=session)
+            group.photo = save_file(data=form.photo.data, path=f'static/downloads/group_{group.id}', group_id=group.id)
+            session.commit()
+        return redirect(f'/group/{ group.id }')
     else:
-        if current_user.type == 2:
-            form.leader_id.data = current_user.id
+        form.leader_id.data = current_user.id
+        form.name.data = f"{current_user.surname}: Факультатив №{ len(current_user.groups) + 1 }"
         return render_template('form_add_group.html', form=form)
 
 
@@ -89,43 +92,20 @@ def edit_group(group_id):
     group = session.query(Group).get(group_id)
     if not group:
         abort(404)
-    elif current_user.type == 2 and not group.leader_id == current_user.id:
+    elif group.leader_id != current_user.id:
         abort(403)
     form = FormEditGroup()
     if form.validate_on_submit():
-        if current_user.type == 2 and form.leader_id.data != current_user.id:
-            return render_template('form_add_group.html', form=form, message="Как учитель, вы можете создать факультатив только под своим руководством, ваш id - " + str(current_user.id))
-        leader = session.query(User).get(form.leader_id.data)
-        if not leader:
-            return render_template('form_add_group.html', form=form, message=f"Человека с id {form.leader_id.data} нет в системе")
-        if leader.type == 3:
-            return render_template('form_add_group.html', form=form, message="Нельзя поставить в руководство ученика")
-        if leader not in group.users:
-            group.users.append(leader)
-            group.users_num += 1
         group.name = form.name.data
-        group.leader_id = form.leader_id.data
         group.info = form.info.data
         if form.photo.data:
-            filename = secure_filename(form.photo.data.filename)
-            path = f'/home/SuperCereal/status-false/static/downloads/group_{group.id}'
-            if not os.path.exists(path):
-                os.mkdir(path)
-            if group.photo and os.path.exists(group.photo.path):
-                os.remove(group.photo.path)
-                session.delete(group.photo)
-            form.photo.data.save(os.path.join(path, filename))
-            photo = File(
-                group_id=group.id,
-                path=os.path.join(path, filename)
-            )
-            group.photo = photo
+            delete_file_if_exists(file=group.photo, session=session)
+            group.photo = save_file(data=form.photo.data, path=f'static/downloads/group_{group.id}', group_id=group.id)
         session.commit()
-        return redirect('/group/' + str(group_id))
+        return redirect(f'/group/{group_id}')
     else:
         form.name.data = group.name
         form.info.data = group.info
-        form.leader_id.data = group.leader_id
         return render_template('form_edit_group.html', form=form)
 
 
@@ -137,11 +117,7 @@ def del_group_photo(group_id):
         abort(404)
     elif current_user.id != group.leader_id:
         abort(403)
-    if group.photo:
-        if os.path.exists(f'/home/SuperCereal/status-false/static/downloads/{group.id}'):
-            os.remove(f'/home/SuperCereal/status-false/static/downloads/{group.id}')
-        session.delete(group.photo)
-        session.commit()
+    delete_file_if_exists(file=group.photo, session=session)
     return redirect(f'/group/{group_id}')
 
 
@@ -156,12 +132,7 @@ def del_group(group_id):
         abort(404)
     elif current_user.type == 2 and not group.leader_id == current_user.id:
         abort(403)
-    if os.path.exists(f'/home/SuperCereal/status-false/static/downloads/group_{group.id}'):
-        for root, dirs, files in os.walk(f'/home/SuperCereal/status-false/static/downloads/group_{group.id}', topdown=False):
-            for name in files:
-                os.remove(os.path.join(root, name))
-            for name in dirs:
-                os.rmdir(os.path.join(root, name))
+    delete_downloads_structure(path=f'static/downloads/group_{group.id}')
     session.delete(group)
     session.commit()
     return redirect('/groups')
@@ -178,7 +149,7 @@ def join_group(group_id):
         group.users.append(session.query(User).get(current_user.id))
         group.users_num += 1
     session.commit()
-    return redirect('/group/' + str(group_id))
+    return redirect(f'/group/{group_id}')
 
 
 @blueprint.route('/leave_group/<int:group_id>')
@@ -194,4 +165,4 @@ def leave_group(group_id):
         group.users.remove(session.query(User).get(current_user.id))
         group.users_num -= 1
     session.commit()
-    return redirect('/group/' + str(group_id))
+    return redirect(f'/group/{group_id}')

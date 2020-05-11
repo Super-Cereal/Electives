@@ -8,6 +8,9 @@ from data.model_users import User
 from forms.form_add_user import FormAddUser
 from forms.form_login import FormLogin
 
+from blueprints.macros.delete_file_if_exists import delete_file_if_exists
+from blueprints.macros.save_file import save_file
+
 
 blueprint = Blueprint('user_authenticate', __name__,
                       template_folder='templates')
@@ -35,6 +38,10 @@ def registration():
         session = db_session.create_session()
         session.add(user)
         session.commit()
+        if form.photo.data:
+            delete_file_if_exists(file=user.photo, session=session)
+            user.photo = save_file(data=form.photo.data, path=f'static/downloads/user_{user.id}', user_id=user.id)
+            session.commit()
         login_user(user)
         return redirect(f'/user/{user.id}')
     else:

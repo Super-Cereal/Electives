@@ -19,7 +19,7 @@
                         <p>{{ line }}</p> 
                     {% endfor %}
                 {% else %}
-                    <p>Нет информации о факультативе</p>
+                    <p><i>Нет информации о факультативе</i></p>
                 {% endif %}
             </div>
             {% if current_user.is_authenticated and current_user.id == group.leader_id and group.photo %}

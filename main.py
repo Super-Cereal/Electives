@@ -3,7 +3,6 @@ from blueprints import user_authenticate, tasks, groups, users
 
 from flask_restful import Api
 from api import resourses_users, resourses_groups
-import os
 
 from data import db_session
 
@@ -11,7 +10,7 @@ from data import db_session
 app = Flask(__name__)
 app.config.from_object('config')
 user_authenticate.login_manager.init_app(app)
-db_session.global_init('./db/SQLiteBase.sqlite')
+db_session.global_init('db/SQLiteBase.sqlite')
 
 app.register_blueprint(user_authenticate.blueprint)
 app.register_blueprint(groups.blueprint)
@@ -33,5 +32,6 @@ def index():
 
 if __name__ == "__main__":
     if True:
-        port = int(os.environ.get("PORT", 5000))
-        app.run(host='0.0.0.0', port=port)
+        # port = int(os.environ.get("PORT", 5000))
+        # app.run(host='0.0.0.0', port=port)
+        app.run()
