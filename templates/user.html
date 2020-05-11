@@ -4,7 +4,7 @@
     <div class="infolist">
         <div class='flexbox flex_c_nowr'>
             <div>
-                <img src="{{ user.photo.path if user.photo else '/static/images/none_image.png' }}" height="200px">
+                <img src="/{{ user.photo.path if user.photo else 'static/images/none_image.png' }}" height="200px">
                 <div class="flexbox flex_jcspacebetween_aicenter">
                     <h2>{{ user.name }} {{ user.surname }} - {{ 'Ученик ' if user.type == 3 }}
                         {{ 'Учитель' if user.type == 2 }}
