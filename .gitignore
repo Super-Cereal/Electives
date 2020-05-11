@@ -1,5 +1,5 @@
-/address.txt
-/address2.txt
+address.txt
+address2.txt
 __pycache__
 .vscode
-test.py
+.pytest_cache
